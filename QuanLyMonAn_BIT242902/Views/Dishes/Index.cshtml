@@ -1,0 +1,113 @@
+﻿@model IEnumerable<QuanLyMonAn_BIT242902.Models.Dish_BIT242902>
+
+@{
+    ViewData["Title"] = "Quản lý Món ăn";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-primary fw-bold">QUẢN LÝ MÓN ĂN</h2>
+
+    <form asp-action="Index" method="get" class="row g-3 mb-4 bg-light p-3 rounded shadow-sm">
+        <div class="col-md-3">
+            <label class="form-label fw-bold">Tìm theo tên</label>
+            <input type="text" name="searchString" value="@ViewData["CurrentSearch"]" class="form-control" placeholder="Nhập tên món..." />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label fw-bold">Loại món</label>
+            <select name="categoryId" class="form-select" asp-items="ViewBag.Categories">
+                <option value="">-- Tất cả loại món --</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label class="form-label fw-bold">Trạng thái</label>
+            <select name="isAvailable" class="form-select">
+                <option value="">-- Tất cả --</option>
+                <option value="true">Đang bán</option>
+                <option value="false">Ngừng bán</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label class="form-label fw-bold">Giá tối đa</label>
+            <input type="number" name="maxPrice" value="@ViewData["MaxPrice"]" class="form-control" placeholder="VNĐ" />
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary w-100 fw-bold">🔍 Lọc / Tìm</button>
+        </div>
+    </form>
+
+    <div class="mb-3">
+        <a asp-action="Create" class="btn btn-success fw-bold">+ Thêm món ăn mới</a>
+    </div>
+
+    <table class="table table-bordered table-striped align-middle shadow-sm">
+        <thead class="table-dark text-center">
+            <tr>
+                <th style="width: 100px;">Hình ảnh</th>
+                <th>Tên món</th>
+                <th>Loại món</th>
+                <th>Giá (VNĐ)</th>
+                <th>Thời gian chế biến</th>
+                <th>Trạng thái</th>
+                <th style="width: 200px;">Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    var thumbImage = item.DishImages?.FirstOrDefault(img => img.IsThumbnail)?.ImageUrl
+                                     ?? item.DishImages?.FirstOrDefault()?.ImageUrl;
+
+                    <tr>
+                        <td class="text-center">
+                            @if (!string.IsNullOrEmpty(thumbImage))
+                            {
+                                <img src="@thumbImage" alt="Món ăn" class="img-thumbnail rounded" style="width: 70px; height: 70px; object-fit: cover;" />
+                            }
+                            else
+                            {
+                                <span class="text-muted small">Không có ảnh</span>
+                            }
+                        </td>
+                        <td><strong>@item.Name</strong></td>
+                        <td>@item.DishCategory?.Name</td>
+                        <td class="text-danger fw-bold">@item.Price.ToString("N0") đ</td>
+                        <td>
+                            @item.PreparationTime phút
+                            @if (item.PreparationTime <= 15)
+                            {
+                                <span class="badge bg-success">Quick / Nhanh</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">Regular / Thông thường</span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            @if (item.IsAvailable)
+                            {
+                                <span class="badge bg-success fs-6">Đang bán</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger fs-6">Ngừng bán</span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm text-white mb-1">Chi tiết</a>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm text-white mb-1">Sửa</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm mb-1">Xóa</a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="7" class="text-center text-muted py-4">Không tìm thấy món ăn nào phù hợp.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

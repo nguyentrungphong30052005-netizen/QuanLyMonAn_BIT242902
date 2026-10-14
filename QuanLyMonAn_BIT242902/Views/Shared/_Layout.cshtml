@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Quản Lý Món Ăn (BIT242902)</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/QuanLyMonAn_BIT242902.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand fw-bold text-primary" asp-controller="Dishes" asp-action="Index">BIT242902 - Food Management</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark fw-bold" asp-controller="Dishes" asp-action="Index">Món ăn</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark fw-bold" asp-controller="DishCategories" asp-action="Index">Loại món</a>
+                        </li>
+                    </ul>
+
+                    <!-- Menu chọn ngôn ngữ (Tiếng Việt / English) -->
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark fw-bold" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                🌐 Ngôn ngữ / Language
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+                                <li>
+                                    <form asp-controller="Home" asp-action="SetLanguage" asp-route-culture="vi-VN" asp-route-returnUrl="@Context.Request.Path" method="post" class="px-2 py-1">
+                                        <button type="submit" class="dropdown-item btn btn-sm w-100 text-start">🇻🇳 Tiếng Việt</button>
+                                    </form>
+                                </li>
+                                <li>
+                                    <form asp-controller="Home" asp-action="SetLanguage" asp-route-culture="en-US" asp-route-returnUrl="@Context.Request.Path" method="post" class="px-2 py-1">
+                                        <button type="submit" class="dropdown-item btn btn-sm w-100 text-start">🇬🇧 English</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted mt-5">
+        <div class="container text-center py-3">
+            &copy; 2026 - Quản Lý Món Ăn - MSSV: BIT242902 - <a asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

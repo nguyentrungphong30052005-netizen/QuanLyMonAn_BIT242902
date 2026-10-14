@@ -1,0 +1,96 @@
+﻿@model QuanLyMonAn_BIT242902.Models.Dish_BIT242902
+
+@{
+    ViewData["Title"] = "Chỉnh sửa món ăn";
+}
+
+<div class="container mt-4" style="max-width: 700px;">
+    <h2 class="mb-4 text-warning fw-bold">CHỈNH SỬA MÓN ĂN</h2>
+
+    <form asp-action="Edit" method="post">
+        <input type="hidden" asp-for="Id" />
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label fw-bold">Tên món ăn</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label fw-bold">Loại món ăn</label>
+            <select asp-for="DishCategoryId" class="form-select" asp-items="ViewBag.DishCategoryId"></select>
+            <span asp-validation-for="DishCategoryId" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Price" class="form-label fw-bold">Giá (VNĐ)</label>
+            <input asp-for="Price" type="number" step="1000" class="form-control" />
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="PreparationTime" class="form-label fw-bold">Thời gian chế biến (phút)</label>
+            <input asp-for="PreparationTime" type="number" class="form-control" />
+            <span asp-validation-for="PreparationTime" class="text-danger"></span>
+        </div>
+
+        <!-- PHẦN QUẢN LÝ ẢNH HIỆN TẠI -->
+        <div class="mb-3 border p-3 rounded bg-light">
+            <label class="form-label fw-bold text-primary">Danh sách hình ảnh hiện tại</label>
+            @if (Model.DishImages != null && Model.DishImages.Any())
+            {
+                <div class="d-flex flex-wrap gap-3 mb-3">
+                    @foreach (var img in Model.DishImages)
+                    {
+                        <div class="card p-2 text-center shadow-sm" style="width: 140px;">
+                            <img src="@img.ImageUrl" class="img-thumbnail rounded mb-2" style="width: 120px; height: 120px; object-fit: cover;" />
+
+                            @if (img.IsThumbnail)
+                            {
+                                <span class="badge bg-danger mb-2">Ảnh đại diện</span>
+                            }
+                            else
+                            {
+                                <form asp-action="SetThumbnail" method="post" class="mb-1">
+                                    <input type="hidden" name="imageId" value="@img.Id" />
+                                    <input type="hidden" name="dishId" value="@Model.Id" />
+                                    <button type="submit" class="btn btn-outline-primary btn-sm w-100" style="font-size: 11px;">Chọn làm đại diện</button>
+                                </form>
+                            }
+
+                            <form asp-action="DeleteImage" method="post">
+                                <input type="hidden" name="imageId" value="@img.Id" />
+                                <input type="hidden" name="dishId" value="@Model.Id" />
+                                <button type="submit" class="btn btn-outline-danger btn-sm w-100" style="font-size: 11px;" onclick="return confirm('Bạn có muốn xóa ảnh này không?');">Xóa ảnh</button>
+                            </form>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <p class="text-muted small">Chưa có hình ảnh nào.</p>
+            }
+
+            <!-- Ô TRỐNG ĐỂ THÊM ẢNH MỚI -->
+            <label class="form-label fw-bold mt-2">Thêm đường dẫn ảnh mới</label>
+            <input type="text" name="imageUrl" class="form-control" placeholder="Nhập đường dẫn ảnh mới (nếu có)..." value="" />
+            <small class="text-muted">Để trống ô này nếu bạn không muốn thêm ảnh mới.</small>
+        </div>
+
+        <div class="mb-3 form-check">
+            <input asp-for="IsAvailable" class="form-check-input" />
+            <label asp-for="IsAvailable" class="form-check-label fw-bold">Đang bán (Available)</label>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label fw-bold">Mô tả chi tiết</label>
+            <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-warning fw-bold text-white">Lưu thay đổi thông tin</button>
+        <a asp-action="Index" class="btn btn-secondary">Quay lại danh sách</a>
+    </form>
+</div>

@@ -1,0 +1,37 @@
+﻿@model QuanLyMonAn_BIT242902.Models.Dish_BIT242902
+
+@{
+    ViewData["Title"] = "Xóa món ăn";
+}
+
+<div class="container mt-4" style="max-width: 600px;">
+    <h2 class="mb-4 text-danger fw-bold">XÓA MÓN ĂN</h2>
+
+    <div class="alert alert-warning" role="alert">
+        Bạn có chắc chắn muốn xóa món ăn này không? Hành động này không thể hoàn tác!
+    </div>
+
+    <div class="card shadow p-4 bg-light">
+        <h4 class="text-primary fw-bold">@Model.Name</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-4 fw-bold">Loại món ăn:</dt>
+            <dd class="col-sm-8"><strong>@Model.DishCategory?.Name</strong></dd>
+
+            <dt class="col-sm-4 fw-bold">Giá bán:</dt>
+            <dd class="col-sm-8 text-danger fw-bold">@Model.Price.ToString("N0") VNĐ</dd>
+
+            <dt class="col-sm-4 fw-bold">Thời gian chế biến:</dt>
+            <dd class="col-sm-8">@Model.PreparationTime phút</dd>
+
+            <dt class="col-sm-4 fw-bold">Trạng thái:</dt>
+            <dd class="col-sm-8">@(Model.IsAvailable ? "Đang bán" : "Ngừng bán")</dd>
+        </dl>
+
+        <form asp-action="Delete" method="post">
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-danger fw-bold">Xác nhận Xóa</button>
+            <a asp-action="Index" class="btn btn-secondary">Quay lại danh sách</a>
+        </form>
+    </div>
+</div>

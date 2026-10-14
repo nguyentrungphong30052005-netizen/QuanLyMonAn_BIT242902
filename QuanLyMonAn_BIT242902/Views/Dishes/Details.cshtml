@@ -1,0 +1,83 @@
+﻿@model QuanLyMonAn_BIT242902.Models.Dish_BIT242902
+
+@{
+    ViewData["Title"] = "Chi tiết món ăn";
+}
+
+<div class="container mt-4" style="max-width: 700px;">
+    <h2 class="mb-4 text-primary fw-bold">CHI TIẾT MÓN ĂN</h2>
+
+    <div class="card shadow-sm p-4">
+        <div class="mb-3">
+            <h3 class="text-dark fw-bold">@Model.Name</h3>
+        </div>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-4 fw-bold">Loại món ăn:</dt>
+            <dd class="col-sm-8"><strong>@Model.DishCategory?.Name</strong></dd>
+
+            <dt class="col-sm-4 fw-bold">Giá bán:</dt>
+            <dd class="col-sm-8 text-danger fw-bold">@Model.Price.ToString("N0") VNĐ</dd>
+
+            <dt class="col-sm-4 fw-bold">Thời gian chế biến:</dt>
+            <dd class="col-sm-8">
+                @Model.PreparationTime phút
+                @if (Model.PreparationTime <= 15)
+                {
+                    <span class="badge bg-success">Quick / Nhanh</span>
+                }
+                else
+                {
+                    <span class="badge bg-secondary">Regular / Thông thường</span>
+                }
+            </dd>
+
+            <dt class="col-sm-4 fw-bold">Trạng thái:</dt>
+            <dd class="col-sm-8">
+                @if (Model.IsAvailable)
+                {
+                    <span class="badge bg-success fs-6">Đang bán</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger fs-6">Ngừng bán</span>
+                }
+            </dd>
+
+            <dt class="col-sm-4 fw-bold">Mô tả chi tiết:</dt>
+            <dd class="col-sm-8">@(string.IsNullOrEmpty(Model.Description) ? "Không có mô tả" : Model.Description)</dd>
+
+            <dt class="col-sm-4 fw-bold">Danh sách hình ảnh:</dt>
+            <dd class="col-sm-8">
+                @if (Model.DishImages != null && Model.DishImages.Any())
+                {
+                    <div class="d-flex flex-wrap gap-3">
+                        @foreach (var img in Model.DishImages)
+                        {
+                            <div class="text-center border p-2 rounded bg-light shadow-sm" style="width: 140px;">
+                                <img src="@img.ImageUrl" alt="Ảnh món ăn" class="img-thumbnail rounded mb-1" style="width: 120px; height: 120px; object-fit: cover;" />
+                                @if (img.IsThumbnail)
+                                {
+                                    <div><span class="badge bg-danger">Ảnh đại diện</span></div>
+                                }
+                                else
+                                {
+                                    <div><span class="badge bg-secondary">Ảnh phụ</span></div>
+                                }
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <span class="text-muted">Chưa có hình ảnh nào cho món ăn này.</span>
+                }
+            </dd>
+        </dl>
+
+        <div class="mt-4">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning fw-bold text-white">Chỉnh sửa</a>
+            <a asp-action="Index" class="btn btn-secondary">Quay lại danh sách</a>
+        </div>
+    </div>
+</div>
